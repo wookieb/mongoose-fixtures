@@ -23,7 +23,6 @@ class Fixtures {
                 return result.concat(fixtures);
             }, []);
 
-
         async.each(models, (model, cb) => {
             model.save(cb);
         }, (err) => {
@@ -40,6 +39,10 @@ class Fixtures {
         async.each(this.models, (model, cb) => {
             model.remove(cb);
         }, callback);
+    }
+
+    clearDatabase() {
+        this.mongoose.connection.db.dropDatabase(callback);
     }
 }
 
