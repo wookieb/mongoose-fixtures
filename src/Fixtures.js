@@ -41,7 +41,7 @@ class Fixtures {
         }, callback);
     }
 
-    clearDatabase() {
+    clearDatabase(callback) {
         this.mongoose.connection.db.dropDatabase(callback);
     }
 }
