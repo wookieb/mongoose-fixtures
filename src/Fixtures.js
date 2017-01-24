@@ -7,7 +7,7 @@ class Fixtures {
         this.mongoose = mongoose;
         this.models = [];
     }
-
+    
     save(fixtures, callback) {
         const models = Object.keys(fixtures)
             .map((key) => {
@@ -22,7 +22,7 @@ class Fixtures {
             .reduce((result, fixtures) => {
                 return result.concat(fixtures);
             }, []);
-
+        
         async.each(models, (model, cb) => {
             model.save(cb);
         }, (err) => {
@@ -34,15 +34,31 @@ class Fixtures {
             callback(null, models);
         });
     }
-
+    
     clear(callback) {
         async.each(this.models, (model, cb) => {
             model.remove(cb);
         }, callback);
     }
-
+    
     clearDatabase(callback) {
-        this.mongoose.connection.db.dropDatabase(callback);
+        const connection = this.mongoose.connection;
+        
+        // for mongoose >= 4.7.9
+        if (connection.dropDatabase) {
+            connection.dropDatabase(callback);
+            return;
+        }
+        
+        // Workaround: https://github.com/Automattic/mongoose/issues/4490
+        if (connection.readyState !== 1) {
+            connection.once('connected', () => {
+                connection.db.dropDatabase(callback);
+            });
+        } else {
+            connection.db.dropDatabase(callback);
+        }
+        
     }
 }
 
