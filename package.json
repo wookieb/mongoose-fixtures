@@ -1,8 +1,9 @@
 {
   "name": "wookieb-mongoose-fixtures",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "",
   "main": "index.js",
+  "types": "index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/wookieb/mongoose-fixtures.git"
@@ -15,5 +16,8 @@
   "homepage": "https://github.com/wookieb/mongoose-fixtures#readme",
   "dependencies": {
     "async": "^2.1.2"
+  },
+  "devDependencies": {
+    "@types/mongoose": "^4.7.4"
   }
 }

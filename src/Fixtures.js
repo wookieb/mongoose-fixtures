@@ -7,7 +7,16 @@ class Fixtures {
         this.mongoose = mongoose;
         this.models = [];
     }
-    
+
+    /**
+     * Saves fixtures
+     * Provided fixtures argument must be an object where keys are mongoose models names and the values must be an array
+     * of objects to save as given model.
+     *
+     * @param {Object} fixtures
+     * @param {Function} [callback]
+     * @return {Promise}
+     */
     save(fixtures, callback) {
         const models = Object.keys(fixtures)
             .map((key) => {
@@ -22,43 +31,63 @@ class Fixtures {
             .reduce((result, fixtures) => {
                 return result.concat(fixtures);
             }, []);
-        
-        async.each(models, (model, cb) => {
-            model.save(cb);
-        }, (err) => {
-            if (err) {
-                callback && callback(err);
-                return;
-            }
-            this.models = this.models.concat(models);
-            callback(null, models);
-        });
+
+        const result = Promise.all(
+            models.map((m) => m.save())
+        )
+            .then(models => {
+                this.models = this.models.concat(models);
+            });
+
+        if (callback) {
+            result.then(() => callback())
+                .catch(callback);
+        }
+        return result;
     }
-    
+
+    /**
+     * Removes all currently saved fixtures
+     *
+     * @param {Function} [callback]
+     * @return {Promise}
+     */
     clear(callback) {
-        async.each(this.models, (model, cb) => {
-            model.remove(cb);
-        }, callback);
+        const result = Promise.all(
+            this.models.map(m => model.remove())
+        );
+
+        if (callback) {
+            result.then(() => callback())
+                .catch(callback);
+        }
+        return result;
     }
-    
+
+    /**
+     * Clears database
+     *
+     * @param {Function} [callback]
+     * @returns {Promise}
+     */
     clearDatabase(callback) {
         const connection = this.mongoose.connection;
-        
+
         // for mongoose >= 4.7.9
         if (connection.dropDatabase) {
-            connection.dropDatabase(callback);
-            return;
+            return connection.dropDatabase(callback);
         }
-        
-        // Workaround: https://github.com/Automattic/mongoose/issues/4490
-        if (connection.readyState !== 1) {
-            connection.once('connected', () => {
-                connection.db.dropDatabase(callback);
-            });
-        } else {
-            connection.db.dropDatabase(callback);
-        }
-        
+
+        return new Promise((resolve) => {
+            // Workaround: https://github.com/Automattic/mongoose/issues/4490
+            if (connection.readyState !== 1) {
+                connection.once('connected', () => {
+                    resolve(connection.db.dropDatabase(callback));
+                });
+            } else {
+                resolve(connection.db.dropDatabase(callback));
+            }
+        })
     }
 }
 
