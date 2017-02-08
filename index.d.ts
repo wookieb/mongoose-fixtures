@@ -10,4 +10,9 @@ export class Fixtures {
     clearDatabase(callback?: (err: any) => void): Promise;
 }
 
-export = (mongoose?: mongoose) => Fixtures
+
+interface fixturesLoader {
+    (mongoose?: mongoose): Fixtures,
+    Fixtures: Fixtures
+}
+export = fixturesLoader;
