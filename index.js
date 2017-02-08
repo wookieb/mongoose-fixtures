@@ -8,8 +8,8 @@ const Fixtures = require('./src/Fixtures');
  * @param {mongoose} [mongoose] if not provided then default mongooose used
  * @returns {Fixtures}
  */
-module.exports = (mongoose) => {
+exports.create = (mongoose) => {
     return new Fixtures(mongoose || require('mongoose'));
 };
 
-module.exports.Fixtures = Fixtures;
+exports.Fixtures = Fixtures;
