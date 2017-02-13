@@ -1,7 +1,5 @@
-import * as mongoose from '@types/mongoose';
-
 export class Fixtures {
-    constructor(mongoose: mongoose);
+    constructor(mongoose: any);
 
     save(fixtures: Object, callback?: (err: any) => void): Promise<any>;
 
@@ -10,4 +8,4 @@ export class Fixtures {
     clearDatabase(callback?: (err: any) => void): Promise<any>;
 }
 
-export declare function create(mongoose: mongoose): Fixtures;
+export declare function create(mongoose: any): Fixtures;
