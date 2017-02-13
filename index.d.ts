@@ -3,11 +3,11 @@ import * as mongoose from '@types/mongoose';
 export class Fixtures {
     constructor(mongoose: mongoose);
 
-    save(fixtures: Object, callback?: (err: any) => void): Promise;
+    save(fixtures: Object, callback?: (err: any) => void): Promise<any>;
 
-    clear(callback?: (err: any) => void): Promise;
+    clear(callback?: (err: any) => void): Promise<any>;
 
-    clearDatabase(callback?: (err: any) => void): Promise;
+    clearDatabase(callback?: (err: any) => void): Promise<any>;
 }
 
-export const create = (mongoose: mongoose) => Fixtures;
+export declare function create(mongoose: mongoose): Fixtures;
