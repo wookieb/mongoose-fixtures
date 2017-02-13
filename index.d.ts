@@ -10,4 +10,4 @@ export class Fixtures {
     clearDatabase(callback?: (err: any) => void): Promise;
 }
 
-export const create = (mongoose: mongoose): Fixtures;
+export const create = (mongoose: mongoose) => Fixtures;
