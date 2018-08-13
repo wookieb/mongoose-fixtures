@@ -1,7 +1,5 @@
-import * as mongoose from '@types/mongoose';
-
 export class Fixtures {
-    constructor(mongoose: mongoose);
+    constructor(mongoose: any);
 
     save(fixtures: Object): Promise;
 
@@ -10,4 +8,4 @@ export class Fixtures {
     clearDatabase(): Promise;
 }
 
-export const create = (mongoose: mongoose) => Fixtures;
+export const create = (mongoose: any) => Fixtures;

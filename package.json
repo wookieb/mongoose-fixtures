@@ -1,6 +1,6 @@
 {
   "name": "wookieb-mongoose-fixtures",
-  "version": "0.5.0",
+  "version": "0.5.3",
   "description": "",
   "main": "index.js",
   "types": "index.d.ts",
@@ -13,8 +13,5 @@
   "bugs": {
     "url": "https://github.com/wookieb/mongoose-fixtures/issues"
   },
-  "homepage": "https://github.com/wookieb/mongoose-fixtures#readme",
-  "devDependencies": {
-    "@types/mongoose": "^4.7.4"
-  }
+  "homepage": "https://github.com/wookieb/mongoose-fixtures#readme"
 }

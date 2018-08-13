@@ -1,7 +1,5 @@
 'use strict';
 
-const async = require('async');
-
 class Fixtures {
     constructor(mongoose) {
         this.mongoose = mongoose;
