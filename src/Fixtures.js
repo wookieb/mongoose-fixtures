@@ -14,10 +14,9 @@ class Fixtures {
      * of objects to save as given model.
      *
      * @param {Object} fixtures
-     * @param {Function} [callback]
      * @return {Promise}
      */
-    save(fixtures, callback) {
+    save(fixtures) {
         const models = Object.keys(fixtures)
             .map((key) => {
                 return fixtures[key].map((fixture) => {
@@ -32,62 +31,32 @@ class Fixtures {
                 return result.concat(fixtures);
             }, []);
 
-        const result = Promise.all(
+        return Promise.all(
             models.map((m) => m.save())
         )
             .then(models => {
                 this.models = this.models.concat(models);
             });
-
-        if (callback) {
-            result.then(() => callback())
-                .catch(callback);
-        }
-        return result;
     }
 
     /**
      * Removes all currently saved fixtures
      *
-     * @param {Function} [callback]
      * @return {Promise}
      */
-    clear(callback) {
-        const result = Promise.all(
+    clear() {
+        return Promise.all(
             this.models.map(m => model.remove())
         );
-
-        if (callback) {
-            result.then(() => callback())
-                .catch(callback);
-        }
-        return result;
     }
 
     /**
      * Clears database
      *
-     * @param {Function} [callback]
      * @returns {Promise}
      */
-    clearDatabase(callback) {
-        const connection = this.mongoose.connection;
-
-        // for mongoose >= 4.7.9
-        if (connection.dropDatabase) {
-            return connection.dropDatabase(callback);
-        }
-
-        return new Promise((resolve) => {
-            // Workaround: https://github.com/Automattic/mongoose/issues/4490
-            if (connection.readyState !== 1) {
-                connection.once('connected', () => {
-                    resolve(connection.db.dropDatabase(callback));
-                });
-            } else {
-                resolve(connection.db.dropDatabase(callback));
-            }
-        })
+    clearDatabase() {
+        return this.mongoose.connection.db.dropDatabase();
     }
 }
 
