@@ -75,7 +75,7 @@ class Fixtures {
 
         // for mongoose >= 4.7.9
         if (connection.dropDatabase) {
-            return connection.dropDatabase(callback);
+            return connection.dropDatabase(...arguments);
         }
 
         return new Promise((resolve) => {
